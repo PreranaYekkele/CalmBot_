@@ -16,14 +16,14 @@ A Flask-based mental health chatbot that provides emotional support and crisis r
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/mental-health-chatbot.git
-cd mental-health-chatbot
+git clone https://github.com/PreranaYekkele/ChatBot_.git
 ```
 
 2. Create a virtual environment:
 ```bash
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
+cd mental-health-chatbot
 ```
 
 3. Install dependencies:
