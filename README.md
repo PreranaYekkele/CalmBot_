@@ -55,10 +55,10 @@ python app.py
 http://localhost:5000
 ```
 
-![CALMBOT](mental-health-chatbot/static/images/calmbot1.png)
-![CALMBOT](mental-health-chatbot/static/images/calmbot2.png)
-![CALMBOT](mental-health-chatbot/static/images/calmbot3.png)
-![CALMBOT](mental-health-chatbot/static/images/calmbot4.png)
+![CALMBOT](mental-health-chatbot/static/calmbot1.png)
+![CALMBOT](mental-health-chatbot/static/calmbot2.png)
+![CALMBOT](mental-health-chatbot/static/calmbot3.png)
+![CALMBOT](mental-health-chatbot/static/calmbot4.png)
 
 
 ## Usage
