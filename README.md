@@ -1,4 +1,4 @@
-# Mental Health Companion Chatbot
+# Mental Health Companion Chatbot - *CALMBOT*
 
 A Flask-based mental health chatbot that provides emotional support and crisis resources. Built with Python, Flask, and Transformers, featuring a responsive purple-black themed interface.
 
