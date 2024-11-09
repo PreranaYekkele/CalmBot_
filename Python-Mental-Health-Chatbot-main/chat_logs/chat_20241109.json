@@ -1,0 +1,4 @@
+{"timestamp": "20241109_122411", "user_message": "hello", "bot_response": {"message": "Hi there! I'm here to listen and support you.", "type": "greeting"}}
+{"timestamp": "20241109_122418", "user_message": "i feel sad", "bot_response": {"message": "Would you like to explore some coping strategies together?", "type": "normal"}}
+{"timestamp": "20241109_122422", "user_message": "yes", "bot_response": {"message": "That's wonderful to hear! Would you like to talk more about it?", "type": "normal"}}
+{"timestamp": "20241109_122434", "user_message": "thank you", "bot_response": {"message": "Your positive energy is inspiring! How can we maintain this feeling?", "type": "normal"}}
