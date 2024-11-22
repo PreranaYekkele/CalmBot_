@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CalmBot - Your Mental Wellness Companion 🌸</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <!-- Chat Container -->
+        <div class="chat-container">
+            <div class="chat-header">
+                <h1>CalmBot</h1>
+                <div class="chat-actions">
+                    <button class="action-button" onclick="clearChat()">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                    <button class="action-button" onclick="toggleTheme()">
+                        <i class="fas fa-adjust"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="chat-messages" id="chatMessages">
+                <!-- Messages will be added here -->
+            </div>
+
+            <div class="chat-input">
+                <input 
+                    type="text" 
+                    id="messageInput"
+                    name="messageInput"
+                    class="message-input"
+                    placeholder="Share your thoughts..." 
+                    aria-label="Message input"
+                    required
+                >
+                <button 
+                    class="action-button" 
+                    type="button" 
+                    id="sendButton"
+                    onclick="sendMessage()"
+                    aria-label="Send message"
+                >
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Activities Container -->
+        <div class="activities-container">
+            <div class="activity-card" onclick="openBreathingExercise()">
+                <h3>🫁 Breathing Exercise</h3>
+                <p>Take a moment to breathe mindfully</p>
+            </div>
+            
+            <div class="activity-card" onclick="openGratitudeJournal()">
+                <h3>📝 Gratitude Journal</h3>
+                <p>Write down what you're grateful for</p>
+            </div>
+            
+            <div class="activity-card" onclick="openMoodTracker()">
+                <h3>📊 Mood Tracker</h3>
+                <p>Track your daily mood</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Resources Button -->
+    <button class="resources-button" onclick="showResources()">
+        <i class="fas fa-phone"></i>
+    </button>
+
+    <!-- Breathing Exercise Modal -->
+    <div id="breathingModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('breathingModal')">
+                <i class="fas fa-times"></i>
+            </button>
+            <h2>Breathing Exercise</h2>
+            <div class="breathing-circle"></div>
+            <p class="breathing-text">Breathe in...</p>
+        </div>
+    </div>
+
+    <!-- Gratitude Journal Modal -->
+    <div id="gratitudeModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('gratitudeModal')">
+                <i class="fas fa-times"></i>
+            </button>
+            <h2>Gratitude Journal</h2>
+            <textarea class="gratitude-textarea" placeholder="What are you grateful for today?"></textarea>
+            <button class="action-button" onclick="saveGratitudeEntry()">Save Entry</button>
+        </div>
+    </div>
+
+    <!-- Mood Tracker Modal -->
+    <div id="moodModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('moodModal')">
+                <i class="fas fa-times"></i>
+            </button>
+            <h2>How are you feeling?</h2>
+            <div class="mood-buttons">
+                <button onclick="trackMood('😊 Happy')" class="mood-button">😊</button>
+                <button onclick="trackMood('😔 Sad')" class="mood-button">😔</button>
+                <button onclick="trackMood('😠 Angry')" class="mood-button">😠</button>
+                <button onclick="trackMood('😰 Anxious')" class="mood-button">😰</button>
+                <button onclick="trackMood('😐 Neutral')" class="mood-button">😐</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Resources Modal -->
+    <div id="resourcesModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('resourcesModal')">
+                <i class="fas fa-times"></i>
+            </button>
+            <h2>Emergency Resources</h2>
+            <div id="resourcesContent"></div>
+        </div>
+    </div>
+
+    <script>
+        let sessionId = Math.random().toString(36).substring(7);
+        let breathingInterval;
+        
+        // Message Handling
+        function addMessage(content, isUser = false) {
+            const messagesDiv = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user' : ''}`;
+            
+            const avatar = document.createElement('div');
+            avatar.className = 'avatar';
+            avatar.innerHTML = isUser ? '<i class="fas fa-user"></i>' : '<i class="fas fa-robot"></i>';
+            
+            const bubble = document.createElement('div');
+            bubble.className = 'message-bubble';
+            bubble.textContent = content;
+            
+            messageDiv.appendChild(avatar);
+            messageDiv.appendChild(bubble);
+            
+            messageDiv.style.opacity = '0';
+            messagesDiv.appendChild(messageDiv);
+            
+            requestAnimationFrame(() => {
+                messageDiv.style.opacity = '1';
+            });
+            
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        // Modal Handling
+        function showModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.style.display = 'block';
+            requestAnimationFrame(() => {
+                modal.classList.add('show');
+            });
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modalId === 'breathingModal' && breathingInterval) {
+                clearInterval(breathingInterval);
+            }
+            modal.classList.remove('show');
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
+        }
+
+        // Chat Functions
+        async function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            
+            if (message) {
+                addMessage(message, true);
+                input.value = '';
+                
+                // Simulate bot response (replace with actual API call)
+                setTimeout(() => {
+                    addMessage("I'm here to help. How can I support you today?");
+                }, 1000);
+            }
+        }
+
+        // Activity Functions
+        function openBreathingExercise() {
+            showModal('breathingModal');
+            const circle = document.querySelector('.breathing-circle');
+            const text = document.querySelector('.breathing-text');
+            
+            let phase = 'inhale';
+            breathingInterval = setInterval(() => {
+                if (phase === 'inhale') {
+                    circle.style.transform = 'scale(1.5)';
+                    text.textContent = 'Breathe in...';
+                    phase = 'hold';
+                } else if (phase === 'hold') {
+                    text.textContent = 'Hold...';
+                    phase = 'exhale';
+                } else {
+                    circle.style.transform = 'scale(1)';
+                    text.textContent = 'Breathe out...';
+                    phase = 'inhale';
+                }
+            }, 4000);
+        }
+
+        function openGratitudeJournal() {
+            showModal('gratitudeModal');
+        }
+
+        function saveGratitudeEntry() {
+            const textarea = document.querySelector('.gratitude-textarea');
+            const entry = textarea.value.trim();
+            
+            if (entry) {
+                closeModal('gratitudeModal');
+                addMessage("Thank you for sharing your gratitude. It's wonderful to focus on the positive things in life!");
+                textarea.value = '';
+            }
+        }
+
+        function openMoodTracker() {
+            showModal('moodModal');
+        }
+
+        function trackMood(mood) {
+            closeModal('moodModal');
+            addMessage(`Thank you for sharing that you're feeling ${mood}. Remember, all emotions are valid and temporary.`);
+        }
+
+        function showResources() {
+            // Simulate loading resources (replace with actual API call)
+            const resourcesContent = document.getElementById('resourcesContent');
+            resourcesContent.innerHTML = `
+                <div style="padding: 1rem;">
+                    <h3 style="color: var(--primary); margin-bottom: 1rem;">24/7 Helplines</h3>
+                    <p>🆘 Emergency: 911</p>
+                    <p>💗 National Crisis Line: 1-800-273-8255</p>
+                    <p>🤝 Crisis Text Line: Text HOME to 741741</p>
+                    
+                    <h3 style="color: var(--primary); margin: 1rem 0;">Online Resources</h3>
+                    <p>🌐 National Alliance on Mental Health</p>
+                    <p>📱 7 Cups - Online Therapy & Counseling</p>
+                    <p>🧘‍♀️ Headspace - Meditation & Mindfulness</p>
+                </div>
+            `;
+            showModal('resourcesModal');
+        }
+
+        // Theme Toggle
+        function toggleTheme() {
+            const root = document.documentElement;
+            const currentTheme = root.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            root.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Clear Chat
+        function clearChat() {
+            const messagesDiv = document.getElementById('chatMessages');
+            messagesDiv.innerHTML = '';
+            addMessage("Hi! I'm CalmBot, your mental health companion. How are you feeling today?");
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set saved theme
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            
+            // Welcome message
+            addMessage("Hi! I'm CalmBot, your mental health companion. How are you feeling today?");
+            
+            // Enter key handler
+            document.getElementById('messageInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+            
+            // Close modals when clicking outside
+            window.onclick = function(event) {
+                if (event.target.classList.contains('modal')) {
+                    closeModal(event.target.id);
+                }
+            };
+        });
+    </script>
+</body>
+</html>
