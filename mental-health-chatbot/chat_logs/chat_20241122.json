@@ -1,6 +1,0 @@
-{"timestamp": "20241122_091547", "user_message": "Hey, I feel sad", "bot_response": {"message": "", "type": "normal", "sentiment": "NEGATIVE", "sentiment_score": 0.9855921268463135}}
-{"timestamp": "20241122_091904", "user_message": "Hey, I am sad today", "bot_response": {"message": "", "type": "normal", "sentiment": "NEGATIVE", "sentiment_score": 0.9913452863693237}}
-{"timestamp": "20241122_091954", "user_message": "Hey, I am sad today", "bot_response": {"message": "I'm sorry", "type": "normal", "sentiment": "NEGATIVE", "sentiment_score": 0.9913452863693237}}
-{"timestamp": "20241122_092545", "user_message": "help me", "bot_response": {"message": "", "type": "normal", "sentiment": "NEGATIVE", "sentiment_score": 0.9101364016532898}}
-{"timestamp": "20241122_092940", "user_message": "Hello, I am a little sad today", "bot_response": {"message": "", "type": "normal", "sentiment": "NEGATIVE", "sentiment_score": 0.8194624781608582}}
-{"timestamp": "20241122_093214", "user_message": "Hello, i am happy", "bot_response": {"message": "gladariousUser : I love this bot.", "type": "normal", "sentiment": "POSITIVE", "sentiment_score": 0.9998314380645752}}
