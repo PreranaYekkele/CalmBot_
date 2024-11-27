@@ -41,9 +41,9 @@ body {
 }
 
 .container {
-    max-width: 1400px;
-    margin: 0 auto;
     padding: 2rem;
+    max-width: 1600px;
+    margin: 0 auto;
     display: grid;
     grid-template-columns: auto 2fr 1fr;
     gap: 2rem;
@@ -91,22 +91,28 @@ body {
 /* Mobile responsiveness */
 @media (max-width: 1024px) {
     .container {
-        grid-template-columns: 1fr;
+        display: flex;
+        flex-direction: column;
+        padding: 1rem;
+        height: auto;
+        gap: 1rem;
     }
-    
+
     .sidebar {
         flex-direction: row;
         justify-content: center;
+        gap: 1rem;
+        padding: 0;
     }
-    
-    .sidebar-button {
-        width: auto;
-        padding: 0.8rem 1.5rem;
-        flex-direction: row;
+
+    .chat-container {
+        height: 70vh;
     }
-    
-    .sidebar-button i {
-        font-size: 1.2rem;
+
+    .activities-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
     }
 }
 
@@ -421,9 +427,36 @@ body {
 }
 
 @media (max-width: 768px) {
-    .specialist-grid {
+    .container {
+        padding: 0.5rem;
+    }
+
+    .activities-container {
         grid-template-columns: 1fr;
     }
+
+    .chat-messages {
+        padding: 1rem;
+    }
+
+    .message {
+        max-width: 90%;
+    }
+
+    .modal-content {
+        width: 95%;
+        padding: 1rem;
+    }
+
+    .specialist-grid {
+        grid-template-columns: 1fr;
+        gap: 0.8rem;
+    }
+}
+
+/* Fix for modal scrolling on mobile */
+.modal {
+    overflow-y: auto;
 }
 
 @keyframes pulse {
@@ -433,13 +466,39 @@ body {
 }
 
 @media (max-width: 768px) {
-    .container {
-        flex-direction: column;
+    .chat-input input,
+    .action-button,
+    .sidebar-button {
+        min-height: 44px; /* minimum touch target size */
+    }
+
+    .chat-input {
+        padding: 0.8rem;
+    }
+
+    /* Make specialist cards more compact on mobile */
+    .specialist-simple-card {
         padding: 1rem;
     }
-    
-    .activities-container {
-        height: auto;
-        margin-top: 1rem;
+
+    /* Adjust activity cards for mobile */
+    .activity-card {
+        padding: 1rem;
+    }
+
+    /* Fix header for mobile */
+    .chat-header {
+        padding: 1rem;
+    }
+
+    .chat-header h1 {
+        font-size: 1.2rem;
+    }
+}
+
+/* Fix for iOS safari viewport height issue */
+@supports (-webkit-touch-callout: none) {
+    .container {
+        min-height: -webkit-fill-available;
     }
 }
