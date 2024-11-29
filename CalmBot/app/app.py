@@ -4,7 +4,9 @@ from app.models.response_model import ResponseModel
 from flask import send_file
 from PIL import Image
 import io
-from .models.database import db, UserActivity
+from datetime import datetime
+from .models.database import MoodEntry, db, UserActivity
+from sqlalchemy import extract
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
@@ -68,6 +70,45 @@ def handle_activity(activity_type):
         return jsonify({'status': 'success', 'message': f'{activity_type} activity recorded'})  
 
     except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+
+@app.route('/api/activities/mood', methods=['POST'])
+def track_mood():
+    try:
+        data = request.json
+        print("Received mood data:", data)  # Debug print
+        new_mood = MoodEntry(
+            session_id=data['session_id'],
+            mood=data['mood'],
+            date=datetime.now().date(),
+            notes=data.get('notes', '')
+        )
+        db.session.add(new_mood)
+        db.session.commit()
+        print("Mood saved successfully")  # Debug print
+        return jsonify({'status': 'success'})
+    except Exception as e:
+        print("Error saving mood:", str(e))  # Debug print
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/moods/<int:month>/<int:year>')
+def get_moods(month, year):
+    try:
+        month_moods = MoodEntry.query.filter(
+            extract('month', MoodEntry.date) == month,
+            extract('year', MoodEntry.date) == year
+        ).all()
+        
+        return jsonify({
+            'moods': [{
+                'date': entry.date.strftime('%Y-%m-%d'),
+                'mood': entry.mood,
+                'notes': entry.notes
+            } for entry in month_moods]
+        })
+    except Exception as e:
+        print("Error fetching moods:", str(e))
         return jsonify({'error': str(e)}), 500
 
 @app.route('/dashboard')
