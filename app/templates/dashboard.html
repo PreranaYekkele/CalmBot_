@@ -1,0 +1,80 @@
+<!-- dashboard.html -->
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CalmBot - Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <!-- Add Chart.js for graphs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+</head>
+<body>
+    <div class="container dashboard-container">
+        <div class="top-nav">
+            <button class="back-button" onclick="window.location.href='/'">
+                <i class="fas fa-arrow-left"></i>
+                Back to Chat
+            </button>
+            <div class="dashboard-title">
+                <h1>Progress Dashboard</h1>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <!-- Mood Overview Card -->
+            <div class="dashboard-card">
+                <h2>Monthly Overview</h2>
+                <canvas id="moodChart"></canvas>
+            </div>
+
+            <!-- Emotion Trends Card -->
+            <div class="dashboard-card">
+                <h2>Emotion Trends</h2>
+                <canvas id="trendChart"></canvas>
+            </div>
+
+            <!-- Calendar Card -->
+            <div class="dashboard-card">
+                <h2>Calendar</h2>
+                <div id="moodCalendar" class="calendar-container">
+                    <div class="calendar-header">
+                        <button onclick="previousMonth()"><i class="fas fa-chevron-left"></i></button>
+                        <h3 id="currentMonth">September 2024</h3>
+                        <button onclick="nextMonth()"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                    <div class="calendar-grid" id="calendarGrid">
+                        <!-- Calendar will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Activity Stats Card -->
+            <div class="dashboard-card">
+                <h2>Activity Stats</h2>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <i class="fas fa-lungs"></i>
+                        <span id="breathingCount">0</span>
+                        <p>Breathing Exercises</p>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-journal-whills"></i>
+                        <span id="journalCount">0</span>
+                        <p>Journal Entries</p>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-chart-line"></i>
+                        <span id="moodCheckCount">0</span>
+                        <p>Emotion Checks</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>
