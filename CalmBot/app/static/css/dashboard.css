@@ -219,3 +219,94 @@
         font-size: 1.4rem;
     }
 }
+
+.calendar-container {
+    background: var(--bg-secondary);
+    border-radius: 15px;
+    padding: 1.5rem;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.calendar-nav-btn {
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.calendar-nav-btn:hover {
+    background: var(--hover-bg);
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.5rem;
+}
+
+.calendar-day {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    border-radius: 50%;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.day-label {
+    font-weight: 600;
+    color: var(--primary);
+    cursor: default;
+}
+
+.calendar-day.empty {
+    background: none;
+}
+
+/* Mood indicators with better visibility */
+.mood-happy {
+    background: rgba(255, 215, 0, 0.2);
+    border: 2px solid #FFD700;
+    color: var(--text-primary);
+}
+
+.mood-sad {
+    background: rgba(65, 105, 225, 0.2);
+    border: 2px solid #4169E1;
+    color: var(--text-primary);
+}
+
+.mood-angry {
+    background: rgba(255, 69, 0, 0.2);
+    border: 2px solid #FF4500;
+    color: var(--text-primary);
+}
+
+.mood-anxious {
+    background: rgba(153, 50, 204, 0.2);
+    border: 2px solid #9932CC;
+    color: var(--text-primary);
+}
+
+.mood-neutral {
+    background: rgba(169, 169, 169, 0.2);
+    border: 2px solid #A9A9A9;
+    color: var(--text-primary);
+}
+
+.calendar-day:not(.empty):hover {
+    transform: scale(1.1);
+    box-shadow: 0 2px 8px var(--shadow-color);
+}
