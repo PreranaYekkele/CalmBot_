@@ -74,42 +74,66 @@ function initTrendChart() {
     });
 }
 
-function updateCalendar() {
+async function updateCalendar() {
     const monthNames = ["January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"];
     
-    document.getElementById('currentMonth').textContent = 
-        `${monthNames[currentDate.getMonth()]} ${currentDate.getFullYear()}`;
+    const month = currentDate.getMonth() + 1;
+    const year = currentDate.getFullYear();
     
-    const grid = document.getElementById('calendarGrid');
-    grid.innerHTML = '';
-    
-    // Add day labels
-    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-    days.forEach(day => {
-        const dayLabel = document.createElement('div');
-        dayLabel.className = 'calendar-day day-label';
-        dayLabel.textContent = day;
-        grid.appendChild(dayLabel);
-    });
-    
-    // Add calendar days
-    const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-    const lastDay = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
-    
-    // Add empty cells for days before the first day of the month
-    for (let i = 0; i < firstDay.getDay(); i++) {
-        const emptyDay = document.createElement('div');
-        emptyDay.className = 'calendar-day empty';
-        grid.appendChild(emptyDay);
-    }
-    
-    // Add days of the month
-    for (let day = 1; day <= lastDay.getDate(); day++) {
-        const dayElement = document.createElement('div');
-        dayElement.className = 'calendar-day';
-        dayElement.textContent = day;
-        grid.appendChild(dayElement);
+    try {
+        const response = await fetch(`/api/moods/${month}/${year}`);
+        const data = await response.json();
+        console.log('Mood data received:', data);  // Debug log
+        
+        document.getElementById('currentMonth').textContent = 
+            `${monthNames[currentDate.getMonth()]} ${year}`;
+        
+        const grid = document.getElementById('calendarGrid');
+        grid.innerHTML = '';
+        
+        // Add day labels
+        const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        days.forEach(day => {
+            const dayLabel = document.createElement('div');
+            dayLabel.className = 'calendar-day day-label';
+            dayLabel.textContent = day;
+            grid.appendChild(dayLabel);
+        });
+        
+        // Get first day of month
+        const firstDay = new Date(year, currentDate.getMonth(), 1);
+        
+        // Add empty cells for days before the first day
+        for (let i = 0; i < firstDay.getDay(); i++) {
+            const emptyCell = document.createElement('div');
+            emptyCell.className = 'calendar-day empty';
+            grid.appendChild(emptyCell);
+        }
+        
+        // Add days of the month
+        const lastDay = new Date(year, currentDate.getMonth() + 1, 0).getDate();
+        for (let day = 1; day <= lastDay; day++) {
+            const dayCell = document.createElement('div');
+            dayCell.className = 'calendar-day';
+            
+            const dateString = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            const dayMood = data.moods.find(m => m.date === dateString);
+            
+            if (dayMood) {
+                const moodClass = dayMood.mood.toLowerCase().replace(' ', '-').replace('😊', 'happy')
+                    .replace('😔', 'sad').replace('😠', 'angry')
+                    .replace('😰', 'anxious').replace('😐', 'neutral');
+                dayCell.classList.add(`mood-${moodClass}`);
+                dayCell.innerHTML = `${day}<span class="mood-emoji">${dayMood.mood.split(' ')[0]}</span>`;
+            } else {
+                dayCell.textContent = day;
+            }
+            
+            grid.appendChild(dayCell);
+        }
+    } catch (error) {
+        console.error('Error updating calendar:', error);
     }
 }
 
