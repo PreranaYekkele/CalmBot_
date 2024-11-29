@@ -175,6 +175,41 @@ function openBreathingExercise() {
     }, 6000);
 }
 
+async function openBreathingExercise() {
+    showModal('breathingModal');
+    const circle = document.querySelector('.breathing-circle');
+    const text = document.querySelector('.breathing-text');
+    
+    let phase = 'inhale';
+    breathingInterval = setInterval(() => {
+        if (phase === 'inhale') {
+            circle.style.transform = 'scale(1.5)';
+            text.textContent = 'Breathe in...';
+            phase = 'hold';
+            setTimeout(() => {
+                if (phase === 'hold') {
+                    text.textContent = 'Hold...';
+                    phase = 'exhale';
+                }
+            }, 2000);
+        } else {
+            circle.style.transform = 'scale(1)';
+            text.textContent = 'Breathe out...';
+            phase = 'inhale';
+        }
+    }, 6000);
+
+    try {
+        await fetch('/api/activities/breathing', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ session_id: sessionId })
+        });
+    } catch (error) {
+        console.error('Error tracking breathing exercise:', error);
+    }
+}
+
 function showModal(modalId) {
     const modal = document.getElementById(modalId);
     modal.style.display = 'block';
