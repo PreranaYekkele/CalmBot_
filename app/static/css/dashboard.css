@@ -1,56 +1,36 @@
-/* dashboard.css */
+/* Complete dashboard.css */
+.dashboard-container {
+    height: 100vh;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
 .top-nav {
     display: flex;
     align-items: center;
-    width: 100%;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
     position: relative;
 }
-
-.dashboard-header {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 2rem;
-    padding: 1rem;
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    border-radius: 20px;
-    color: white;
-}
-
-.dashboard-header h1 {
-    font-size: 1.8rem;
-    margin: 0;
-}
-
 
 .back-button {
     position: absolute;
     left: 0;
-    top: 0;
     background: linear-gradient(135deg, var(--primary), var(--secondary));
     border: none;
     color: white;
-    padding: 0.8rem 1.5rem;
-    border-radius: 25px;
+    padding: 0.5rem 1rem;
+    border-radius: 15px;
+    font-size: 0.9rem;
     display: flex;
     align-items: center;
     gap: 0.5rem;
     cursor: pointer;
     transition: all 0.3s ease;
-    font-size: 1rem;
-    z-index: 2;
 }
 
 .back-button:hover {
-    transform: translateX(-5px);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-
-.back-button i {
-    font-size: 1rem;
-    transition: transform 0.3s ease;
+    transform: translateX(-3px);
 }
 
 .dashboard-title {
@@ -59,7 +39,7 @@
 }
 
 .dashboard-title h1 {
-    font-size: 1.8rem;
+    font-size: 1.2rem;
     margin: 0;
     color: var(--text-primary);
 }
@@ -67,81 +47,84 @@
 .dashboard-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 2rem;
+    gap: 1rem;
+    height: calc(100vh - 80px);
 }
 
 .dashboard-card {
     background: var(--bg-primary);
-    border-radius: 20px;
-    padding: 1.5rem;
-    box-shadow: 0 8px 32px var(--shadow-color);
+    border-radius: 15px;
+    padding: 1rem;
+    box-shadow: 0 4px 15px var(--shadow-color);
     border: 1px solid var(--border-color);
-    transition: transform 0.3s ease;
-}
-
-.dashboard-card:hover {
-    transform: translateY(-5px);
+    display: flex;
+    flex-direction: column;
+    height: 250px;
+    overflow: hidden;
 }
 
 .dashboard-card h2 {
-    margin-bottom: 1.5rem;
+    font-size: 1rem;
+    margin-bottom: 0.8rem;
     color: var(--text-primary);
-    font-size: 1.4rem;
 }
 
 /* Calendar Styles */
 .calendar-container {
-    width: 100%;
+    flex: 1;
+    padding: 0.5rem;
+    overflow: auto;
 }
 
 .calendar-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1rem;
-}
-
-.calendar-header button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: var(--text-primary);
-    padding: 0.5rem;
-    border-radius: 50%;
-    transition: all 0.3s ease;
-}
-
-.calendar-header button:hover {
-    background: var(--hover-bg);
-    transform: scale(1.1);
+    margin-bottom: 0.5rem;
 }
 
 .calendar-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 0.5rem;
+    gap: 2px;
+    height: calc(100% - 30px); /* Account for header */
 }
 
 .calendar-day {
     aspect-ratio: 1;
+    position: relative;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    border-radius: 50%;
+    font-size: 0.8rem;
+    border-radius: 5px;
+    background: var(--bg-secondary);
     cursor: pointer;
-    transition: all 0.3s ease;
-    color: var(--text-primary);
+    transition: all 0.2s ease;
+}
+
+.calendar-day.has-entry::after {
+    content: '✓';
+    position: absolute;
+    bottom: 2px;
+    font-size: 0.7rem;
+    color: var(--primary);
 }
 
 .calendar-day:hover {
     background: var(--hover-bg);
-    transform: scale(1.1);
 }
 
 .day-label {
     font-weight: 600;
     color: var(--primary);
+    font-size: 0.7rem;
+    cursor: default;
+    background: none;
+}
+
+.empty {
+    background: none;
     cursor: default;
 }
 
@@ -149,73 +132,101 @@
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
+    gap: 0.5rem;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem 0;
 }
 
 .stat-item {
+    padding: 0.5rem;
     text-align: center;
-    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     background: var(--bg-secondary);
-    border-radius: 15px;
-    transition: transform 0.3s ease;
+    border-radius: 10px;
+    transition: transform 0.2s ease;
 }
 
 .stat-item:hover {
-    transform: translateY(-5px);
+    transform: translateY(-2px);
 }
 
 .stat-item i {
-    font-size: 2rem;
+    font-size: 1.2rem;
     color: var(--primary);
-    margin-bottom: 0.5rem;
-    transition: transform 0.3s ease;
-}
-
-.stat-item:hover i {
-    transform: rotate(10deg);
+    margin-bottom: 0.3rem;
 }
 
 .stat-item span {
-    display: block;
-    font-size: 1.8rem;
+    font-size: 1.1rem;
     font-weight: 600;
     color: var(--text-primary);
-    margin-bottom: 0.5rem;
 }
 
 .stat-item p {
+    font-size: 0.7rem;
+    margin: 0.2rem 0 0 0;
     color: var(--text-secondary);
-    font-size: 0.9rem;
 }
 
-@media (max-width: 1024px) {
+/* Chart styles */
+canvas {
+    max-height: 200px !important;
+}
+
+/* Mood color indicators */
+.mood-happy { background: rgba(255, 215, 0, 0.2); border: 1px solid #FFD700; }
+.mood-sad { background: rgba(65, 105, 225, 0.2); border: 1px solid #4169E1; }
+.mood-angry { background: rgba(255, 69, 0, 0.2); border: 1px solid #FF4500; }
+.mood-anxious { background: rgba(153, 50, 204, 0.2); border: 1px solid #9932CC; }
+.mood-neutral { background: rgba(169, 169, 169, 0.2); border: 1px solid #A9A9A9; }
+
+/* Day details modal */
+.modal-content {
+    width: 90%;
+    max-width: 400px;
+    padding: 1.5rem;
+}
+
+.details-content {
+    margin-top: 1rem;
+}
+
+.details-content > div {
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.details-content h4 {
+    color: var(--primary);
+    font-size: 0.9rem;
+    margin-bottom: 0.3rem;
+}
+
+#detailsDate {
+    text-align: center;
+    color: var(--text-primary);
+    font-size: 1rem;
+    margin-bottom: 1rem;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
     .dashboard-grid {
         grid-template-columns: 1fr;
+        gap: 0.8rem;
     }
-}
 
-@media (max-width: 768px) {
-    .back-button {
-        padding: 0.6rem 1rem;
-        font-size: 0.9rem;
+    .dashboard-card {
+        height: 200px;
     }
-    
-    .dashboard-title h1 {
-        font-size: 1.4rem;
-    }
-    
-    .dashboard-container {
-        padding: 1rem;
-    }
-    .dashboard-container {
-        padding: 1rem;
-    }
-    
-    .stats-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .dashboard-header h1 {
-        font-size: 1.4rem;
+
+    .stat-item {
+        padding: 0.3rem;
     }
 }

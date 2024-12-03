@@ -2,6 +2,13 @@ let sessionId = Math.random().toString(36).substring(7);
 let breathingInterval;
 
 let messageCount = 0;
+let specialistRecommended = false;
+
+const negativeEmotions = ['sad', 'angry', 'anxious', 'worried', 'stressed', 'depressed', 'hopeless', 'frustrated'];
+
+function isNegativeEmotion(message) {
+    return negativeEmotions.some(emotion => message.toLowerCase().includes(emotion));
+}
 
 const specialistsData = {
     'dr-mittal': {
@@ -63,11 +70,42 @@ function addMessage(content, isUser = false) {
 
     if (!isUser) {
         messageCount++;
-        if (messageCount === 4) {
-            setTimeout(() => {
-                showModal('specialistModal');
-            }, 1000);
+        if (messageCount % 4 === 0 && !specialistRecommended) {
+            const lastUserMessage = getLastUserMessage();
+            if (isNegativeEmotion(lastUserMessage)) {
+                setTimeout(() => {
+                    addMessage("I notice you might benefit from professional support. Would you like to connect with some specialized therapists who can help?");
+                    addChoiceButtons();
+                }, 1000);
+            }
         }
+    }
+}
+
+function getLastUserMessage() {
+    const messages = document.querySelectorAll('.message.user .message-bubble');
+    return messages[messages.length - 1]?.textContent || '';
+}
+
+function addChoiceButtons() {
+    const messagesDiv = document.getElementById('chatMessages');
+    const choiceDiv = document.createElement('div');
+    choiceDiv.className = 'choice-buttons';
+    
+    choiceDiv.innerHTML = `
+        <button onclick="handleSpecialistChoice(true)" class="choice-button">Yes, show me the specialists</button>
+        <button onclick="handleSpecialistChoice(false)" class="choice-button">Not Now</button>
+    `;
+    
+    messagesDiv.appendChild(choiceDiv);
+}
+
+function handleSpecialistChoice(showSpecialists) {
+    if (showSpecialists) {
+        showModal('specialistModal');
+    } 
+    else {
+        addMessage("Ofcourse. How can I support you today?");
     }
 }
 
@@ -236,13 +274,26 @@ async function saveGratitudeEntry() {
             await fetch('/api/activities/gratitude', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ entry, session_id: sessionId })
+                body: JSON.stringify({ 
+                    entry,
+                    session_id: sessionId,
+                    date: new Date().toISOString()
+                })
             });
+            await fetch('/api/calendar/entry', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    gratitude: entry,
+                    date: new Date().toISOString()
+                })
+            });
+
             closeModal('gratitudeModal');
-            addMessage("Thank you for sharing your gratitude. It's wonderful to focus on the positive things in life!");
+            addMessage("Thank you for sharing your gratitude!");
             textarea.value = '';
         } catch (error) {
-            addMessage("I'm having trouble saving your entry. Please try again.");
+            console.error('Error:', error);
         }
     }
 }
@@ -256,12 +307,26 @@ async function trackMood(mood) {
         await fetch('/api/activities/mood', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ mood, session_id: sessionId })
+            body: JSON.stringify({ 
+                mood, 
+                session_id: sessionId,
+                date: new Date().toISOString()
+            })
         });
+        
+        await fetch('/api/calendar/entry', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                mood: mood,
+                date: new Date().toISOString()
+            })
+        });
+
         closeModal('moodModal');
-        addMessage(`Thank you for sharing that you're feeling ${mood}. How can I support you?`);
+        addMessage(`Thank you for sharing that you're feeling ${mood}.`);
     } catch (error) {
-        addMessage("I'm having trouble tracking your mood. Please try again.");
+        console.error('Error:', error);
     }
 }
 
@@ -277,6 +342,10 @@ function clearChat() {
     const messagesDiv = document.getElementById('chatMessages');
     messagesDiv.innerHTML = '';
     addMessage("Hi! I'm CalmBot, your mental health companion. How are you feeling today?");
+}
+
+function logout() {
+    window.location.href = '/logout';
 }
 
 document.addEventListener('DOMContentLoaded', () => {

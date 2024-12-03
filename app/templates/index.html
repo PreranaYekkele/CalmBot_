@@ -56,6 +56,9 @@
                 <p>Track your daily mood</p>
             </div>
         </div>
+        <button onclick="logout()" class="logout-button">
+            <i class="fas fa-sign-out-alt"></i>
+        </button>
     </div>
 
     <div id="breathingModal" class="modal">
@@ -76,7 +79,9 @@
             </button>
             <h2>Gratitude Journal</h2>
             <textarea class="gratitude-textarea" placeholder="What are you grateful for today?"></textarea>
-            <button class="action-button" onclick="saveGratitudeEntry()">Save Entry</button>
+            <div class="modal-actions">
+                <button class="action-button" onclick="saveGratitudeEntry()">Save Entry</button>
+            </div>
         </div>
     </div>
 
@@ -87,11 +92,26 @@
             </button>
             <h2>How are you feeling?</h2>
             <div class="mood-buttons">
-                <button onclick="trackMood('😊 Happy')" class="mood-button">😊</button>
-                <button onclick="trackMood('😔 Sad')" class="mood-button">😔</button>
-                <button onclick="trackMood('😠 Angry')" class="mood-button">😠</button>
-                <button onclick="trackMood('😰 Anxious')" class="mood-button">😰</button>
-                <button onclick="trackMood('😐 Neutral')" class="mood-button">😐</button>
+                <button onclick="trackMood('😊 Happy')" class="mood-button">
+                    <span>😊</span>
+                    <p>Happy</p>
+                </button>
+                <button onclick="trackMood('😔 Sad')" class="mood-button">
+                    <span>😔</span>
+                    <p>Sad</p>
+                </button>
+                <button onclick="trackMood('😠 Angry')" class="mood-button">
+                    <span>😠</span>
+                    <p>Angry</p>
+                </button>
+                <button onclick="trackMood('😰 Anxious')" class="mood-button">
+                    <span>😰</span>
+                    <p>Anxious</p>
+                </button>
+                <button onclick="trackMood('😐 Neutral')" class="mood-button">
+                    <span>😐</span>
+                    <p>Neutral</p>
+                </button>
             </div>
         </div>
     </div>
