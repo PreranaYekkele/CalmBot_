@@ -26,7 +26,6 @@ database_dir = os.path.join(basedir, 'database')
 if not os.path.exists(database_dir):
     os.makedirs(database_dir)
 
-# Set the database URI to use the full path
 database_path = os.path.join(database_dir, 'calmbot.db')
 app.config['SECRET_KEY'] = os.urandom(24)
 app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{database_path}'
@@ -96,7 +95,7 @@ def chat():
         response = response_model.get_response(data['message'], data['session_id'])
         return jsonify({'response': response})
     except Exception as e:
-        print("Error:", str(e))  # Add error logging
+        print("Error:", str(e))  
         return jsonify({'error': str(e)}), 500
 
 @app.route('/api/activities/<activity_type>', methods=['POST'])
@@ -201,7 +200,7 @@ def dashboard():
 @app.route('/api/stats')
 def get_stats():
     try:
-        # Count activities for each type
+        
         breathing_count = UserActivity.query.filter_by(activity_type='breathing').count()
         journal_count = UserActivity.query.filter_by(activity_type='gratitude').count()
         mood_count = UserActivity.query.filter_by(activity_type='mood').count()
@@ -217,14 +216,13 @@ def get_stats():
 @app.route('/api/log-specialist-selection', methods=['POST'])
 def log_specialist_selection():
     data = request.json
-    # In a real application, you would save this to your database
-    # For now, we'll just log it
+    
     print(f"Specialist selected: {data}")
     return jsonify({'status': 'success'})
 
 @app.route('/api/placeholder/<int:width>/<int:height>')
 def placeholder_image(width, height):
-    # Create a simple placeholder image
+
     img = Image.new('RGB', (width, height), color = 'lightgray')
     img_io = io.BytesIO()
     img.save(img_io, 'PNG')
