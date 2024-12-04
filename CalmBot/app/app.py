@@ -105,13 +105,6 @@ def handle_activity(activity_type):
         data = request.json
         session_id = data['session_id']
         
-        # if activity_type == 'breathing':
-        #     return jsonify({'status': 'success', 'message': 'Breathing exercise completed'})
-        # elif activity_type == 'mood':
-        #     return jsonify({'status': 'success', 'message': 'Mood tracked'})
-        # elif activity_type == 'gratitude':
-        #     return jsonify({'status': 'success', 'message': 'Gratitude entry saved'})
-
         new_activity = UserActivity(
             session_id=session_id,
             activity_type=activity_type
